@@ -9,5 +9,8 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
 }
