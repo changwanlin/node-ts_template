@@ -1,6 +1,9 @@
 /**
  * 請參考 human.ts 的語法完成 Rational 類
  */
+/**
+ * 請參考 human.ts 的語法完成 Rational 類
+ */
 export class Rational {
     private numerator: number;
     private denominator: number;
@@ -9,8 +12,9 @@ export class Rational {
         if (denominator === 0) {
             throw new Error("Denominator can't be zero.");
         }
-        this.numerator = numerator;
-        this.denominator = denominator;
+        const gcd = this.gcd(numerator, denominator);
+        this.numerator = numerator / gcd;
+        this.denominator = denominator / gcd;
     }
 
     getNumerator(): number {
@@ -20,17 +24,12 @@ export class Rational {
     getDenominator(): number {
         return this.denominator;
     }
+
     normalize(): Rational {
         const gcd = this.gcd(this.numerator, this.denominator);
-        let newNumerator = this.numerator / gcd;
-        let newDenominator = this.denominator / gcd;
-
-        if (newNumerator % newDenominator === 0) {
-            newNumerator += 1;
-        }
-        
-        return new Rational(newNumerator, newDenominator);
+        return new Rational(this.numerator / gcd, this.denominator / gcd);
     }
+
     private gcd(a: number, b: number): number {
         while (b !== 0) {
             const temp = b;
@@ -45,13 +44,18 @@ export class Rational {
     }
 
     isDecimal(): boolean {
-        return this.numerator % this.denominator !== 0;
+        return !this.isWhole();
     }
 
     equals(r: Rational): boolean {
-        return this.normalize().getNumerator() === r.normalize().getNumerator() &&
-               this.normalize().getDenominator() === r.normalize().getDenominator();
+        const normalizedThis = this.normalize();
+        const normalizedR = r.normalize();
+        return (
+            normalizedThis.numerator === normalizedR.numerator &&
+            normalizedThis.denominator === normalizedR.denominator
+        );
     }
+
     static _parseRational(char1: string[], char2: string[]): Rational {
         const numerator = parseInt(char1.join(''));
         const denominator = parseInt(char2.join(''));
@@ -61,6 +65,7 @@ export class Rational {
         }
         return new Rational(numerator, denominator);
     }
+
     static parseRational(str: string): Rational {
         const parts = str.split('/');
 
@@ -69,6 +74,10 @@ export class Rational {
         }
         const numerator = parseInt(parts[0].trim());
         const denominator = parseInt(parts[1].trim());
+
+        if (isNaN(numerator) || isNaN(denominator)) {
+            throw new Error("Invalid input. Unable to parse integers from input string.");
+        }
 
         return new Rational(numerator, denominator);
     }
