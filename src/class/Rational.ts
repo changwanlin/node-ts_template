@@ -1,9 +1,6 @@
 /**
  * 請參考 human.ts 的語法完成 Rational 類
  */
-/**
- * 請參考 human.ts 的語法完成 Rational 類
- */
 export class Rational {
     private numerator: number;
     private denominator: number;
